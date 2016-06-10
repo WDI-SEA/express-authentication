@@ -30,8 +30,8 @@ app.get('/', function(req, res) {
   res.render('index');
 });
 
-app.get('/protected', isLoggedIn, function(req, res) {
-  res.render('protected');
+app.get('/profile', isLoggedIn, function(req, res) {
+  res.render('profile');
 });
 
 app.use('/auth', require('./controllers/auth'));
