@@ -36,7 +36,7 @@ passport.use(new FacebookStrategy({
   enableProof: true
 }, function(accessToken, refreshToken, profile, cb) {
   console.log(profile);
-  var email = profile.emails[0] ? profile.emails[0].value : null;
+  var email = profile.emails ? profile.emails[0].value : null;
 
   db.user.find({
     where: { email: email },
