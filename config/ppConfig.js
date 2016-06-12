@@ -1,5 +1,6 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 var db = require('../models');
 
 passport.serializeUser(function(user, cb) {
@@ -25,6 +26,48 @@ passport.use(new LocalStrategy({
       cb(null, user);
     }
   }).catch(cb);
+}));
+
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_APP_SECRET,
+  callbackURL: process.env.APP_URL + '/auth/facebook/callback',
+  profileFields: ['id', 'email', 'displayName'],
+  enableProof: true
+}, function(accessToken, refreshToken, profile, cb) {
+  console.log(profile);
+  var email = profile.emails[0] ? profile.emails[0].value : null;
+
+  db.user.find({
+    where: { email: email },
+  }).then(function(existingUser) {
+    if (existingUser) {
+      existingUser.update({
+        facebookId: profile.id,
+        facebookToken: accessToken
+      }).then(function(updatedUser) {
+        cb(null, existingUser);
+      }).catch(cb);
+    } else {
+      db.user.findOrCreate({
+        where: { facebookId: profile.id },
+        defaults: {
+          facebookToken: accessToken,
+          name: profile.displayName,
+          email: email
+        }
+      }).spread(function(user, created) {
+        if (created) {
+          return cb(null, user);
+        } else {
+          user.facebookToken = accessToken;
+          user.save().then(function() {
+            cb(null, user);
+          }).catch(cb);
+        }
+      }).catch(cb);
+    }
+  }).catch(cb)
 }));
 
 module.exports = passport;
