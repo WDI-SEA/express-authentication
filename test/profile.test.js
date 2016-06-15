@@ -19,7 +19,7 @@ describe('GET /profile', function() {
 
   it('should return a 200 response if logged in', function(done) {
     agent.post('/auth/signup')
-    .set('Content-Type', 'application/x-www-form-urlencoded')
+    .type('form')
     .send({
       email: 'my@user.co',
       name: 'Brian',
