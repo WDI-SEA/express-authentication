@@ -40,7 +40,7 @@ passport.use(new FacebookStrategy({
   db.user.find({
     where: { email: email },
   }).then(function(existingUser) {
-    if (existingUser) {
+    if (existingUser && email) {
       existingUser.update({
         facebookId: profile.id,
         facebookToken: accessToken
