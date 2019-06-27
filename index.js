@@ -1,12 +1,13 @@
-var express = require('express');
-var ejsLayouts = require('express-ejs-layouts');
-var bodyParser = require('body-parser');
-var app = express();
+require('dotenv').config();
+const express = require('express');
+const ejsLayouts = require('express-ejs-layouts');
+const app = express();
 
 app.set('view engine', 'ejs');
 
 app.use(require('morgan')('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(__dirname + "/public"));
 app.use(ejsLayouts);
 
 app.get('/', function(req, res) {
