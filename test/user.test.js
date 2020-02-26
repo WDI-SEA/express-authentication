@@ -11,7 +11,7 @@ describe('Creating a User', function() {
   it('should create successfully', function(done) {
     db.user.create({
       email: 'test@test.co',
-      name: 'Brian',
+      name: 'Muttbuncher',
       password: 'password'
     }).then(function() {
       done();
@@ -59,7 +59,7 @@ describe('Creating a User', function() {
   it('should hash the password before save', function(done) {
     db.user.create({
       email: 'test@test.co',
-      name: 'Brian',
+      name: 'Muttbuncher',
       password: 'password'
     }).then(function(newUser) {
       if (newUser.password === 'password') {

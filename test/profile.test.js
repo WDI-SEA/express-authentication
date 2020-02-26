@@ -22,7 +22,7 @@ describe('GET /profile', function() {
     .set('Content-Type', 'application/x-www-form-urlencoded')
     .send({
       email: 'my@user.co',
-      name: 'Brian',
+      name: 'Steve Peters',
       password: 'password'
     })
     .expect(302)
@@ -31,8 +31,6 @@ describe('GET /profile', function() {
       if (error) {
         done(error);
       } else {
-        agent.saveCookies(res);
-
         agent.get('/profile')
         .expect(200, done);
       }
