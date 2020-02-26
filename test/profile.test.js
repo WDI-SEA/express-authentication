@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 var request = require('supertest');
-var app = require('../index');
+var app = require('../server');
 var db = require('../models');
 var agent = request.agent(app);
 
