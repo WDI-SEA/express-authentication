@@ -6,7 +6,8 @@ const passport = require('./config/ppConfig');
 const flash = require('connect-flash');
 const helmet = require('helmet');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-
+const db = require('./models');
+const isLoggedIn = require('./middleware/isLoggedIn');
 const app = express();
 
 app.set('view engine', 'ejs');
