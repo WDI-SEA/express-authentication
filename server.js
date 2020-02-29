@@ -6,6 +6,7 @@ const passport = require('./config/ppConfig');
 const flash = require('connect-flash');
 const helmet = require('helmet');
 const app = express();
+const isLoggedIn = require('./middleware/isLoggedIn');
 
 app.set('view engine', 'ejs');
 
