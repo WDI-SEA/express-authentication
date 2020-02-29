@@ -5,6 +5,8 @@ const session = require('express-session');
 const passport = require('./config/ppConfig');
 const flash = require('connect-flash');
 const helmet = require('helmet');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -15,11 +17,19 @@ app.use(express.static(__dirname + '/public'));
 app.use(layouts);
 app.use(helmet());
 
+const sessionStore = new SequelizeStore({
+  db: db.sequelize,
+  expiration: 1000 * 60 * 30
+})
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: sessionStore
 }));
+
+sessionStore.sync();
 
 app.use(passport.initialize());
 app.use(passport.session());
