@@ -4,6 +4,7 @@ const layouts = require('express-ejs-layouts');
 const session = require('express-session');
 const passport = require('./config/ppConfig');
 const flash = require('connect-flash');
+const helmet = require('helmet');
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -12,6 +13,7 @@ app.use(require('morgan')('dev'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 app.use(layouts);
+app.use(helmet());
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -35,7 +37,7 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('/profile', (req, res) => {
+app.get('/profile', isLoggedIn, (req, res) => {
   res.render('profile');
 });
 
