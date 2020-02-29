@@ -17,18 +17,19 @@ router.post('/signup', (req, res) => {
   }).then(([user, created]) => {
     if (created) {
       // if created, success and redirect home
-      console.log(`${user.name} was created!`);
       passport.authenticate('local', {
         successRedirect: '/',
+        successFlash: 'Thanks for signing up!'
       })(req, res);
     } else {
       // if not created, the email already exists
-      console.log('Email already exists');
+      req.flash('error', 'There is already an accound associated with that email');
       res.redirect('/auth/signup');
     }
-  }).catch(function(error) {
+  }).catch(error => {
     // if an error occurs, let's see what the error is
-    console.log('An error occurred: ', error.message);
+    console.log('💩 ' + error.message);
+    req.flash('error', error.message);
     res.redirect('/auth/signup');
   });
 });
@@ -39,11 +40,14 @@ router.get('/login', (req, res) => {
 
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/auth/login'
+  successFlash: 'Welcome back',
+  failureRedirect: '/auth/login',
+  failureFlash: 'Try again tipship'
 }));
 
 router.get('/logout', (req, res) => {
   req.logout();
+  req.flash('success', 'Smell ya later!');
   res.redirect('/');
 });
 
