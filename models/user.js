@@ -1,4 +1,6 @@
 'use strict';
+const bcrypt = require('bcrypt');
+
 const {
   Model
 } = require('sequelize');
@@ -11,6 +13,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+    }
+
+    validPassword(typedPassword) {
+      let isValid = bcrypt.compareSync(typedPassword, this.password); // returns a boolean
+      return isValid;
+    }
+
+    toJSON() {
+      let userData = this.get();
+      delete userData.password;
+      return userData;
     }
   };
   user.init({
@@ -34,9 +47,9 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       validate: {
-        min: {
-          args: 8,
-          msg: 'Password must be at least 8 characters long'
+        len: {
+          args: [8, 99],
+          msg: 'Password must be between 8 and 99 characters long'
         },
         notContains: {
           args: this.name,
@@ -45,6 +58,17 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
+    hooks: {
+      beforeCreate: (pendingUser, options) => {
+        // check if there is a user being passed AND that that user has a password
+        if (pendingUser && pendingUser.password) {
+          // hash the pass
+          let hash = bcrypt.hashSync(pendingUser.password, 12);
+          // store the hash as the user's pass
+          pendingUser.password = hash
+        }
+      }
+    },
     sequelize,
     modelName: 'user',
   });
