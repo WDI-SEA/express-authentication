@@ -23,7 +23,7 @@ describe('Auth Controller', function() {
       .send({
         email: 'test@butts.co',
         name: 'Mike Schull',
-        password: '123123123'
+        password: 'password'
       })
       .expect('Location', '/')
       .expect(302, done);
@@ -55,7 +55,7 @@ describe('Auth Controller', function() {
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .send({
         email: 'test@butts.co',
-        password: '123123123'
+        password: 'password'
       })
       .expect('Location', '/')
       .expect(302, done);
