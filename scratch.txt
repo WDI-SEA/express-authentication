@@ -1,0 +1,4 @@
+sequelize model:create --name user --attributes email:string,name:string,password:string
+
+# Sequelize 5.22 does NOT play nice with node > version 13, so must reinstall; reinstalled everything for good measure.
+npm i dotenv ejs express express-ejs-layouts morgan pg sequelize
