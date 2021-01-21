@@ -1,0 +1,15 @@
+<% if (alerts.error) { %>
+    <div class="alert-container error">
+        <% alerts.error.forEach(msg => { %>
+            <p class="alert"><%= msg %></p>
+        <% }) %>
+    </div>
+<% } %>
+
+<% if (alerts.success) { %> 
+    <div class="alert-container success">
+        <% alerts.success.forEach(msg => { %>
+            <p class="alert"><%= msg %></p>
+        <% }) %>
+    </div>
+<% } %>
