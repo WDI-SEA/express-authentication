@@ -23,11 +23,15 @@ router.post('/signup', (req, res) => {
   }).then(([user, created]) => {
     // if the user WAS created
     if (created) {
-      // redirect to homepage or profile
       console.log(`😎 ${user.name} was created!`);
-      res.redirect('/');
+
+      // authenticat and redirect to homepage or profile
+      passport.authenticate('local', {
+        successRedirect: '/'
+      })(req, res);
     } else { // else (there is a user at that email so they can't sign up)
       console.log(`⛔️ ${user.name} already exists!`);
+
       // redirect to /auth/signup 
       res.redirect('/auth/signup');
     }
