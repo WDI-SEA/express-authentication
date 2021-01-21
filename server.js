@@ -3,6 +3,7 @@ const express = require('express');
 const layouts = require('express-ejs-layouts');
 const session = require('express-session');
 const passport = require('./config/ppConfig');
+const isLoggedIn = require('./middleware/isLoggedIn');
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -32,11 +33,12 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('/profile', (req, res) => {
+app.get('/profile', isLoggedIn, (req, res) => {
   res.render('profile');
 });
 
 app.use('/auth', require('./routes/auth'));
+// app.use('/dino', isLoggedIn, require('./routes/dinos'));
 
 var server = app.listen(process.env.PORT || 3000, ()=> console.log(`🎧You're listening to the smooth sounds of port ${process.env.PORT || 3000}🎧`));
 
